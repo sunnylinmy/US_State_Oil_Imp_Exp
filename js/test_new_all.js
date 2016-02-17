@@ -439,7 +439,7 @@ state_svg.on("click", function(){
             }).attr("word-break","keep-all");
    });
 
-addColorbar(green_range,color_green);
+//addColorbar(green_range,color_green);
 
 function countryName(data) { 
       
