@@ -15,12 +15,6 @@ d3.select("#map-container").remove();
 d3.select(".canvas").remove();
 d3.select("#unitsTag").remove();
 
-function val(d) {return d.GEN_VAL_YR;};
-function state(d) {return d.STATE;};
-function year(d) {return d.year;};
-function naics(d) {return d.NAICS;};
-function cty(d) {return d.CTY_CODE;};
-function state_val(d) {return d.STATE_VAL;};
 
 var var_name,
 	num_data,
@@ -174,9 +168,10 @@ state_svg.on("click", function(){
 
   var yHeight = 25;  //bar height
 
-  var unitsTag = d3.select("#container").append("div").attr("id","unitsTag").text("Units: US dollars").style("width",width+"px").style("margin", "10px auto");
+  var unitsTag = d3.select("#container").append("div").attr("id","unitsTag").text(this.id).style("width",width+"px").style("margin", "2px auto");
+  var units = d3.select("#unitsTag").append("aside").attr("id","units").text("Units: US dollars").style("width",width+"px").style("margin", "1px auto");
 
-  var canvas = d3.select("#container").append("div").attr("class","canvas").style("width",width+"px").style("margin", "10px auto");
+  var canvas = d3.select("#container").append("div").attr("class","canvas").style("width",width+"px").style("margin", "2px auto");
  
   var ytextchart = canvas.append("div").attr("id","ytextchart").style("width","200px");
 
@@ -213,34 +208,12 @@ function countryName(data) {
          }
        };
 
+addColorbar(blue_range,color_blue);
 
 };    // End of Ready Function
 
 
-var unique = function(xs) {
-  var seen = {}
-  return xs.filter(function(x) {
-    if (seen[x])
-      return
-    seen[x] = true
-    return x
-  })
-};
-
-function filterJSON(json, key, value) {
-    var result = [];
-    for (var indicator in json) {
-        if (json[indicator][key] === value) {
-            result.push(json[indicator]);
-        }
-    }
-    return result;
-};
-
 }
-
-
-
 
 
 function choice_exp(){
@@ -251,12 +224,6 @@ d3.select("#map-container").remove();
 d3.select(".canvas").remove();
 d3.select("#unitsTag").remove();
 
-function val(d) {return d.GEN_VAL_YR;};
-function state(d) {return d.STATE;};
-function year(d) {return d.year;};
-function naics(d) {return d.NAICS;};
-function cty(d) {return d.CTY_CODE;};
-function state_val(d) {return d.STATE_VAL;};
 
 var var_name,
   num_data,
@@ -354,7 +321,7 @@ function ready(error, map, data, country) {
 
   //Drawing Choropleth
 var green_range = [0.1, 1, 10, 100, 1000,10000,100000];
-var color_green = ['#e5f5e0','#c7e9c0','#a1d99b','#74c476','#41ab5d','#238b45','#005a32'];
+var color_green = ['rgb(229,245,224)','rgb(199,233,192)','rgb(161,217,155)','rgb(116,196,118)','rgb(65,171,93)','rgb(35,139,69)','rgb(0,90,50)'];
 var color = d3.scale.linear().domain([0.1, 1, 10, 100, 1000,10000,100000])
     .range(color_green);
 
@@ -411,9 +378,10 @@ state_svg.on("click", function(){
 
   var yHeight = 25;  //bar height
 
-  var unitsTag = d3.select("#container").append("div").attr("id","unitsTag").text("Units: US dollars").style("width",width+"px").style("margin", "10px auto");
+  var unitsTag = d3.select("#container").append("div").attr("id","unitsTag").text(this.id).style("width",width+"px").style("margin", "2px auto");
+  var units = d3.select("#unitsTag").append("aside").attr("id","units").text("Units: US dollars").style("width",width+"px").style("margin", "1px auto");
 
-  var canvas = d3.select("#container").append("div").attr("class","canvas").style("width",width+"px").style("margin", "10px auto");
+  var canvas = d3.select("#container").append("div").attr("class","canvas").style("width",width+"px").style("margin", "2px auto");
  
   var ytextchart = canvas.append("div").attr("id","ytextchart").style("width","200px");
 
@@ -439,7 +407,8 @@ state_svg.on("click", function(){
             }).attr("word-break","keep-all");
    });
 
-//addColorbar(green_range,color_green);
+
+addColorbar(green_range,color_green);
 
 function countryName(data) { 
       
@@ -450,18 +419,21 @@ function countryName(data) {
          }
        };
 
-function addColorbar(range1,color_range){
- d3.selectAll("#colorbar").remove();
 
-       var fillings = d3.scale.log().domain(d3.extent(range1)).range([color_range[0],color_range[color_range.length-1]]);
-      var colorbar=Colorbar().origin([25,300]).thickness(10000).scale(fillings).barlength(350).thickness(10).orient("horizontal");
-      colorbarObject = d3.selectAll("#map-container").append("g").attr("id","colorbar");
-      var pointer = d3.selectAll("#colorbar").transition().duration(200).call(colorbar);
-}
 
 
 };    // End of Ready Function
 
+
+};
+
+
+function val(d) {return d.GEN_VAL_YR;};
+function state(d) {return d.STATE;};
+function year(d) {return d.year;};
+function naics(d) {return d.NAICS;};
+function cty(d) {return d.CTY_CODE;};
+function state_val(d) {return d.STATE_VAL;};
 
 var unique = function(xs) {
   var seen = {}
@@ -483,5 +455,26 @@ function filterJSON(json, key, value) {
     return result;
 };
 
-}
 
+function addColorbar(range1,color_range){
+
+
+var svg = d3.select("#map-container").append("svg").attr("id","svg-color-quant");
+
+var label_Ordinal = d3.scale.ordinal()
+    .domain(range1)
+    .range(color_range);
+
+svg.append("g")
+  .attr("class", "legendOrdinal")
+  .attr("transform", "translate(800,350)").attr("id","colorbar_unit");
+
+var colorLegend = d3.legend.color()
+    .orient("vertical")
+    .scale(label_Ordinal);
+
+svg.select(".legendOrdinal")
+  .call(colorLegend);
+
+
+};

@@ -41,7 +41,6 @@ function Colorbar() {
     function chart(selection) {
         var fillLegend,
             fillLegendScale;
-	selection.selectAll(".pointer").remove()
 
 
         selection.each(function(data) {
@@ -63,7 +62,7 @@ function Colorbar() {
                 length_attr = "width"
                 axis_orient = "bottom"
                 position_variable = "x"
-		non_position_variable = "y"
+		          non_position_variable = "y"
                 axis_transform = "translate (0," + thickness + ")"
             }
 
@@ -124,7 +123,7 @@ function Colorbar() {
 
             var legendRange = d3.range(
                 0, barlength,
-                by=barlength / (fillLegendScale.domain().length - 1));
+                by=barlength / (fillLegendScale.domain().length - 1)*10);
 
             legendRange.push(barlength);
 
