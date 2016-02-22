@@ -27,29 +27,22 @@ var width = window.outerWidth *0.5,
   	height = 500;
 
 
-  var div = d3.select("#container").append("div")   
+var div = d3.select("#container").append("div")   
   .attr("class", "tooltip")               
   .style("opacity", 0);
 
-  var button_container = d3.select("#button-container").style("width",window.outerWidth*0.14+"px").style("margin", "10px auto");
+var button_container = d3.select("#button-container").style("width",window.outerWidth*0.14+"px").style("margin", "10px auto");
 
-  var svg = d3.select("#container").append("svg")
+var svg = d3.select("#container").append("svg")
   .attr("width", width)
   .attr("height", height)
   .attr("margin-left",width*0.25)
   .style("margin", "10px auto")
   .attr("id","map-container");
 
-  var projection = d3.geo.albers()
-  .rotate([-105, 0])
-  .center([-10, 65])
-  .parallels([52, 64])
-  .scale(700)
-  .translate([width / 2, height / 2]);
+var projection = d3.geo.albersUsa().translate([width / 2, height / 2]);
 
-  var projection = d3.geo.albersUsa().translate([width / 2, height / 2]);
-
-  var path = d3.geo.path().projection(projection);
+var path = d3.geo.path().projection(projection);
 
   //Reading map file and data
 
@@ -287,7 +280,8 @@ function ready(error, map, data, country) {
     }
     sortedState = jsonArr.map(state).sort(d3.ascending);
 
-
+    allsortedState = jsonArr.map(val).sort(d3.ascending);
+    console.log(allsortedState);
     var stateName;
     stateName=unique(sortedState);
 
@@ -373,13 +367,19 @@ state_svg.on("click", function(){
         return d3.descending(val(a),val(b));
     });
 
-  var xLength =  d3.scale.linear().domain([Number(sorted_Country[0]),Number(sorted_Country[sorted_Country.length-1])])
+  var xLength =  d3.scale.linear().domain([Number(allsortedState[allsortedState.length-1]),Number(allsortedState[0])])
               .range([width-210,1]);
 
   var yHeight = 25;  //bar height
 
-  var unitsTag = d3.select("#container").append("div").attr("id","unitsTag").text(this.id).style("width",width+"px").style("margin", "2px auto");
-  var units = d3.select("#unitsTag").append("aside").attr("id","units").text("Units: US dollars").style("width",width+"px").style("margin", "1px auto");
+  var unitsTag = d3.select("#container").append("div")
+                   .attr("id","unitsTag").text(this.id)
+                   .style("width",width+"px")
+                   .style("margin", "2px auto");
+                   
+  var units = d3.select("#unitsTag").append("aside").attr("id","units")
+                .text("Units: US dollars").style("width",width+"px")
+                .style("margin", "1px auto");
 
   var canvas = d3.select("#container").append("div").attr("class","canvas").style("width",width+"px").style("margin", "2px auto");
  
